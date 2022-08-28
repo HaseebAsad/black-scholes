@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+  </head>
+
+
+  <body>
+    <h1><a href="/">Haseeb's Option Tool </a></h1>
+
+    <p>
+    If you would like to skip ahead to the calculator, press <a href="#calculator">here.</a>
+    </p>
+
+    <h2>About</h2>
+    <p>
+      This app is an educational options tool based on the Black-Scholes-Merton model for the value of a European Call with a non-dividend paying underlying:
+      \[c = S_0N(d_1)-Ke^{-rT}N(d_2).\]
+      Investors often use sophisticated strategies when trading options in the market and this page offers the user to be construct a few of these strategies given inputs, and to see
+      how these strategies may be constructed, their payoffs and their costs. The tool also allows the user to compare different strategies and hence pick the most suitable strategy
+      for their risk profile.
+    </p>
+
+    <h2>Theory</h2>
+    <h3>Inputs</h3>
+    The Black-Scholes-Merton Model, and by extension the calculator, take inputs in to calculate the value of a given option and its related strategies. These are:
+    <ul>
+      <li><b>Spot price \(S_t\) :</b> The spot price is the price of the underlying at a given time \(t\).</li>
+      <li><b>Strike price \(K\) :</b> The strike price or the exercise price is the price at which the underlying may be bought or sold in the options contract.</li>
+      <li><b>Risk-free interest rate \(r\) :</b> This is used to represent the return of a risk-free asset. In practice, models often use annualised treasury interest rates.</li>
+      <li><b>Volatility \(\sigma\) :</b> Volatility is a measure of the return realised on the underlying asset. Usually, implied volatility (forward-looking) is used by investors.</li>
+      <li><b>Time to expiry \(T-\tau \):</b> This is the time remaining from the time of spot price until maturity/exercise of the option.</li>
+    </ul>
+    It is possible to translate both the spot price and the time to expiry so that they are situated around \(t = 0\). This is used in the calculator.
+    </p>
+
+    <h3>Black-Scholes-Merton Model</h3>
+    <p>
+    As aforementioned, this calculator is based on the Nobel prize-winning Black-Scholes-Merton (BSM) model, of which we use the derived pricing formulas for a European call and European Put.
+    Importantly, key assumptions used to construct the BSM model, and thus must be assumed in the usage of this calculator are
+    <ul>
+      <li><b>No dividends:</b> An important assumption is that the underlying offers no dividends during the life of the derivative. There is an alternate model if there are dividend payments.</li>
+      <li><b>Brownian Motion:</b> The underlying price is a Wiener Process, with stock drift and volatility constant.</li>
+      <li><b>Risk-free interest:</b> The risk-free rate of interest \(r\) is constant and same for all maturities.</li>
+      <li><b>Frictionless market:</b> There are no transaction costs or taxes. All securities are perfectly divisible (i.e. decimal divisions of a security are valid).</li>
+      <li><b>No early exercise:</b> European-style options do not allow for the early exercise of the option contract - they may only be exercised at maturity.</li>
+    </ul>
+    </p>
+
+    <h3>American options </h3>
+    <p>
+    American options allow for the holder of the option to exercise anytime during its life.
+    With this in mind, it may come of surprise that it can be proven that an American call option has the same value as a European call option, as one can prove that it is never optimal to exercise an American call before expiry.
+    An American put, however, is a lot more difficult to value given the stochastic nature of the underlying. There is no accepted closed-form solution, however, Wang Xiadong offered a closed-form solution [2] which is used in this calculator.
+    </p>
+
+    <h3>Exotic options </h3>
+    European and American style options are referred to as vanilla products. However, there is much more flexibility allowed in the options market, such as Bermudan options, barrier options, chooser options etc.
+    Functionality for exotic options is currently under development.
+
+    <h2>Calculator</h2>
+    <h5>Notes for usage of the calculator</h5>
+    <p>
+      Before using this calculator, there are a few practical notes to consider. First, make sure that the risk-free interest rate and time to expiry are measured in the same units of time.
+      In practice, often the annualised versions of both are used, but the model supports any unit of time as long as these units are consistent across the inputs. <br>
+      Second, it is important to note that the strategies available are usually only constructed with European-Style options.
+      They are not, in practice, usually constructed with American or exotic options and some strategies will incur a loss in all circumstances if they are not constructed with European options. <br>
+      However, this calculator still includes the functionality for the user to create strategies with non-European options for theoretical discussions.
+    </p>
+
+    <form method="post" action="{{ url_for('result') }}" id="calculator">
+        <label for="spot">Spot Price \(S_0 \) :</label>
+        <input type="number" step="any" name="spot" id="spot" min="0">
+        <br/>
+        <label for="strike">Strike \(K\):</label>
+        <input type="number" step="any" name="strike" id="strike" min="0">
+        <br/>
+        <label for="r">Interest rate \(r\):</label>
+        <input type="number" step="any" name="r" id="r" min="0">
+        <br/>
+        <label for="vol">Volatility \(\sigma\):</label>
+        <input type="number" step="any" name="vol" id="vol" min="0">
+        <br/>
+        <label for="time">Time to expiry \(T\):</label>
+        <input type="number" step="any" name="time" id="time" min="0">
+        <br/>
+        <label for="combination"> Does your strategy require more than one strike?</label>
+        <input type="checkbox" id="combination" onclick="function()">
+        <!-- Need Javascript to add functionality here for strategies with several strikes -->
+        <br/>
+        <label for="addStrike" style="display:none"><span title="An additional strike is required for spread strategies."> Additional strike:</span></label>
+        <input type="number" style="display:none" step="any" name="addStrike" id="addStrike" min="0" value="0">
+        <script>
+        </script>
+        <br/>
+        <label for="type">Option type</label>
+        <select id="type" name="type">
+            <option value="European">European</option>
+            <option value="American">American</option>
+        </select>
+        <br/>
+        <label for="strat">Strategy</label>
+        <select id="strat" name="strat">
+            <option value="Call">Call</option>
+            <option value="Put">Put</option>
+            <option value="Straddle">Straddle</option>
+            <option value="Strip">Strip</option>
+            <option value="Strap">Strap</option>
+            <option value="Bull Spread">Bull Spread</option>
+            <option value="Bear Spread">Bear Spread</option>
+            <option value="Box Spread">Box Spread</option>
+            <option value="Butterfly Spread">Butterfly Spread</option>
+            <option value="Strangle">Strangle</option>
+        </select>
+        <br/>
+        <input type="submit" value="Submit"/>
+        <input type="reset"  value="RESET" style="color: red;"/>
+    </form>
+    {% if calculation_success == True %}
+        <br/>
+        <p>The cost for your inputs: <br>
+          \(S_0\) = {{S0}} <br>
+          \(K\) = {{K}} <br>
+          \(K2\) = {{K2}} <br>
+          \(r\) = {{r}} <br>
+          \(\sigma \) = {{vol}} <br>
+          \(T\) = {{T}} <br>
+          for the given type
+          <span style="color: blue"> {{Type}} </span>
+          and given strategy
+          <span style="color: green">{{strat}} </span>
+          is: {{cost}}. <br>
+        </p>
+        <p>
+        Explanation for your chosen strategy <span style="color: green">{{strat}} </span> is: <br>
+        {{desc}}
+        </p>
+    {% endif %}
+    {% if calculation_success == False %}
+        <br/>
+        <p>{{error}}</p>
+    {% endif %}
+    <br>
+    <footer>
+    The majority of the theory used in the development of this app has been extracted from Hull's <i>Options, Futures and Other Derivatives</i>. <br>
+    [1]<a href="https://www.math.tamu.edu/~mike.stecher/425/Sp12/putCallOptions.pdf">Spring 2012 Put/Call Options. (n.d.). [online]. Proof of the equal valuation of an American and European call option.</a><br>
+    [2]<a href="http://aeconf.com/articles/may2007/aef080111.pdf">Xiaodong, W. (2007). The Closed-form Solution for Pricing American Put Options. ANNALS OF ECONOMICS AND FINANCE, [online] 8(1), pp.197–215.</a>
+    </footer>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>
