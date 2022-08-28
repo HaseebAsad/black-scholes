@@ -1,3 +1,3 @@
 *Placeholder Title*
 
-$pi$
+$\pi$
