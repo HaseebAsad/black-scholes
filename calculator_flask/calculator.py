@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request
-import git
 from BlackScholesFormulae import Call, Put
 from OptionsFlask import Option
 
@@ -13,19 +12,6 @@ def index():
     """ Displays the index page accessible at '/' """
 
     return render_template('index.html')
-
-"""Route to update the server with GitHub"""
-@app.route('/update_server', methods=['POST'])
-    def webhook():
-        if request.method == 'POST':
-            repo = git.Repo('./myproject') #need to add our path directory, which is?
-            origin = repo.remotes.origin
-            repo.create_head('master', 
-        origin.refs.master).set_tracking_branch(origin.refs.master).checkout()
-            origin.pull()
-            return '', 200
-        else:
-            return '', 400
 
 @app.route('/', methods=['POST'])
 def result():
@@ -123,7 +109,7 @@ def result():
             strat = strat,
             result="Bad Input",
             calculation_success=False,
-            error="You cannot divide by zero"
+            error="Make sure you have the correct number of inputs for your relevant strategy!"
         )
 
     except ValueError:
