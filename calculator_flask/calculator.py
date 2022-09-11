@@ -13,7 +13,7 @@ def index():
 
     return render_template('index.html')
 
-@app.route('/result/', methods=['POST'])
+@app.route('/', methods=['POST'])
 def result():
     """Route where we send calculator form input"""
 
@@ -39,7 +39,7 @@ def result():
         T = float(T)
         """Create a derivative variable with necessary attributes for analysis"""
         derivative = Option(Type,S0,K,r,vol,T)
-        
+
         # On default, the strategy on webpage is call
         if strat == "Call":
             cost = Call(S0, K, r, vol, T)
@@ -79,8 +79,8 @@ def result():
             derivative.Strangle(K2)
             cost = derivative.Cost
             desc = derivative.desc
-            
-        
+
+
         return render_template(
             'index.html',
             S0 = S0, #the new variables created are what we will refer to in the html
@@ -95,7 +95,7 @@ def result():
             desc = desc,
             calculation_success=True
         )
-        
+
     except ZeroDivisionError:
         return render_template(
             'index.html',
@@ -109,9 +109,9 @@ def result():
             strat = strat,
             result="Bad Input",
             calculation_success=False,
-            error="You cannot divide by zero"
+            error="Make sure you have the correct number of inputs for your relevant strategy!"
         )
-        
+
     except ValueError:
         return render_template(
             'index.html',

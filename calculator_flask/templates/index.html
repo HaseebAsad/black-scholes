@@ -95,10 +95,10 @@
         <input type="number" step="any" name="time" id="time" min="0">
         <br/>
         <label for="combination"> Does your strategy require more than one strike?</label>
-        <input type="checkbox" id="combination" onclick="function()">
+        <input type="checkbox" id="remember" onclick="validate()">
         <!-- Need Javascript to add functionality here for strategies with several strikes -->
-        <br/>
-        <label for="addStrike" style="display:none"><span title="An additional strike is required for spread strategies."> Additional strike:</span></label>
+        
+        <label for="addStrike" style="display:none" id="addStrikeLabel"><span title="An additional strike is required for spread strategies."> Additional strike:</span></label>
         <input type="number" style="display:none" step="any" name="addStrike" id="addStrike" min="0" value="0">
         <script>
         </script>
@@ -111,16 +111,16 @@
         <br/>
         <label for="strat">Strategy</label>
         <select id="strat" name="strat">
-            <option value="Call">Call</option>
-            <option value="Put">Put</option>
-            <option value="Straddle">Straddle</option>
-            <option value="Strip">Strip</option>
-            <option value="Strap">Strap</option>
-            <option value="Bull Spread">Bull Spread</option>
-            <option value="Bear Spread">Bear Spread</option>
-            <option value="Box Spread">Box Spread</option>
-            <option value="Butterfly Spread">Butterfly Spread</option>
-            <option value="Strangle">Strangle</option>
+            <option value="Call" id="call">Call</option>
+            <option value="Put" id="put">Put</option>
+            <option value="Straddle" id="straddle">Straddle</option>
+            <option value="Strip" id="strip">Strip</option>
+            <option value="Strap" id="strap">Strap</option>
+            <option value="Bull Spread" id="bullSpread" style="display:none">Bull Spread</option>
+            <option value="Bear Spread" id="bearSpread" style="display:none">Bear Spread</option>
+            <option value="Box Spread" id="boxSpread" style="display:none">Box Spread</option>
+            <option value="Butterfly Spread" id="butterflySpread" style="display:none">Butterfly Spread</option>
+            <option value="Strangle" id="strangle" style="display:none">Strangle</option>
         </select>
         <br/>
         <input type="submit" value="Submit"/>
@@ -157,7 +157,35 @@
     [2]<a href="http://aeconf.com/articles/may2007/aef080111.pdf">Xiaodong, W. (2007). The Closed-form Solution for Pricing American Put Options. ANNALS OF ECONOMICS AND FINANCE, [online] 8(1), pp.197–215.</a>
     </footer>
 
-    <!-- Optional JavaScript -->
+    <script type="text/javascript">
+      function validate() {
+          if (document.getElementById('remember').checked) {
+            document.getElementById("addStrike").style.display = "block"
+            document.getElementById("addStrikeLabel").style.display = "block"
+            document.getElementById("bullSpread").style.display = "block"
+            document.getElementById("bearSpread").style.display = "block"
+            document.getElementById("butterflySpread").style.display = "block"
+            document.getElementById("strangle").style.display = "block"
+            document.getElementById("call").style.display = "none"
+            document.getElementById("put").style.display = "none"
+            document.getElementById("straddle").style.display = "none"
+            document.getElementById("strip").style.display = "none"
+            document.getElementById("strap").style.display = "none";
+          } else {
+            document.getElementById("addStrike").style.display = "none"
+            document.getElementById("addStrikeLabel").style.display = "none"
+            document.getElementById("bullSpread").style.display = "none"
+            document.getElementById("bearSpread").style.display = "none"
+            document.getElementById("butterflySpread").style.display = "none"
+            document.getElementById("strangle").style.display = "none"
+            document.getElementById("call").style.display = "block"
+            document.getElementById("put").style.display = "block"
+            document.getElementById("straddle").style.display = "block"
+            document.getElementById("strip").style.display = "block"
+            document.getElementById("strap").style.display = "block";
+          }
+      }
+    </script>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
