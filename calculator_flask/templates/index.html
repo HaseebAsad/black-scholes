@@ -78,6 +78,7 @@
       However, this calculator still includes the functionality for the user to create strategies with non-European options for theoretical discussions.
     </p>
 
+    <div id="calculatorForm">
     <form method="post" action="{{ url_for('result') }}" id="calculator">
         <label for="spot">Spot Price \(S_0 \) :</label>
         <input type="number" step="any" name="spot" id="spot" min="0">
@@ -95,9 +96,7 @@
         <input type="number" step="any" name="time" id="time" min="0">
         <br/>
         <label for="combination"> Does your strategy require more than one strike?</label>
-        <input type="checkbox" id="remember" onclick="validate()">
-        <!-- Need Javascript to add functionality here for strategies with several strikes -->
-        
+        <input type="checkbox" id="check1" onclick="validate()">
         <label for="addStrike" style="display:none" id="addStrikeLabel"><span title="An additional strike is required for spread strategies."> Additional strike:</span></label>
         <input type="number" style="display:none" step="any" name="addStrike" id="addStrike" min="0" value="0">
         <script>
@@ -126,6 +125,9 @@
         <input type="submit" value="Submit"/>
         <input type="reset"  value="RESET" style="color: red;"/>
     </form>
+    <label for="addStrat"> Would you like to add another strategy?</label>
+    <input type="checkbox" id="check2" onclick="repeat()">
+    </div>
     {% if calculation_success == True %}
         <br/>
         <p>The cost for your inputs: <br>
@@ -150,16 +152,30 @@
         <br/>
         <p>{{error}}</p>
     {% endif %}
-    <br>
+
+    <script type="text/javascript">
+      function multiplyNode(node, count, deep) {
+        for (var i = 0, copy; i < count - 1; i++) {
+          copy = node.cloneNode(deep);
+          node.parentNode.insertBefore(copy, node);
+        }
+      }
+      function repeat() {
+          if (document.getElementById('check2').checked) {
+            alert("not functional yet")
+            multiplyNode(document.querySelector('#calculatorForm'), 2, true);
+          }
+      }
+    </script>
+
     <footer>
     The majority of the theory used in the development of this app has been extracted from Hull's <i>Options, Futures and Other Derivatives</i>. <br>
     [1]<a href="https://www.math.tamu.edu/~mike.stecher/425/Sp12/putCallOptions.pdf">Spring 2012 Put/Call Options. (n.d.). [online]. Proof of the equal valuation of an American and European call option.</a><br>
     [2]<a href="http://aeconf.com/articles/may2007/aef080111.pdf">Xiaodong, W. (2007). The Closed-form Solution for Pricing American Put Options. ANNALS OF ECONOMICS AND FINANCE, [online] 8(1), pp.197–215.</a>
     </footer>
-
     <script type="text/javascript">
       function validate() {
-          if (document.getElementById('remember').checked) {
+          if (document.getElementById("check1").checked) {
             document.getElementById("addStrike").style.display = "block"
             document.getElementById("addStrikeLabel").style.display = "block"
             document.getElementById("bullSpread").style.display = "block"
